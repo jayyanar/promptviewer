@@ -50,8 +50,8 @@ export default function AgentTile({ agent, promptId, onUpdate }: AgentTileProps)
       // Parse behaviors (must be 2-5 items)
       const behaviorsList = behaviors
         .split('\n')
-        .map((b) => b.trim())
-        .filter((b) => b.length > 0);
+        .map((b: string) => b.trim())
+        .filter((b: string) => b.length > 0);
 
       if (behaviorsList.length < 2 || behaviorsList.length > 5) {
         setError('Behaviors must contain 2-5 items');
@@ -62,8 +62,8 @@ export default function AgentTile({ agent, promptId, onUpdate }: AgentTileProps)
       // Parse constraints
       const constraintsList = constraints
         .split('\n')
-        .map((c) => c.trim())
-        .filter((c) => c.length > 0);
+        .map((c: string) => c.trim())
+        .filter((c: string) => c.length > 0);
 
       // Parse examples
       const examplesList = [];
@@ -71,8 +71,8 @@ export default function AgentTile({ agent, promptId, onUpdate }: AgentTileProps)
       
       for (const pair of examplePairs) {
         const lines = pair.split('\n');
-        const inputLine = lines.find((l) => l.startsWith('Input:'));
-        const outputLine = lines.find((l) => l.startsWith('Output:'));
+        const inputLine = lines.find((l: string) => l.startsWith('Input:'));
+        const outputLine = lines.find((l: string) => l.startsWith('Output:'));
         
         if (inputLine && outputLine) {
           examplesList.push({
