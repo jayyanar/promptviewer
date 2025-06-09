@@ -8,6 +8,9 @@ const nextConfig = {
   env: {
     // Environment variables can be added here
   },
+  // Add these settings for Amplify deployment
+  output: 'standalone',
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
