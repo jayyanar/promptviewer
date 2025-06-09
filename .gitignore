@@ -1,0 +1,4 @@
+# .gitignore
+# Ignore every node_modules folder (typical)
+frontend/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node
+
