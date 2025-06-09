@@ -1,0 +1,504 @@
+{
+  "version": "44.0.0",
+  "artifacts": {
+    "PromptWeaverStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "PromptWeaverStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "PromptWeaverStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "PromptWeaverStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/94b1ee08ba715a748bc64f7ac97e2b0084ae18aea512d3e7cfb32c1413ab6089.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "PromptWeaverStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "PromptWeaverStack.assets"
+      ],
+      "metadata": {
+        "/PromptWeaverStack/PromptWeaverPrompts/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverPrompts54D03F2B"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverAgents/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverAgentsC417A6F4"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverVersions/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverVersions96BB21F1"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverUsers/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverUsers6B4F7664"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverUserPoolC4194F4C"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverUserPool/PreSignUpCognito": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverUserPoolPreSignUpCognitoEA5FE0A7"
+          }
+        ],
+        "/PromptWeaverStack/PreSignupHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PreSignupHandlerServiceRoleA0E30858"
+          }
+        ],
+        "/PromptWeaverStack/PreSignupHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PreSignupHandlerA249D3E0"
+          }
+        ],
+        "/PromptWeaverStack/GoogleProvider/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GoogleProvider566D8493"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverUserPoolClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverUserPoolClient7327CCCC"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverLambdaRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverLambdaRole5D29D728"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverLambdaRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96"
+          }
+        ],
+        "/PromptWeaverStack/PromptHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptHandler42443BB3"
+          }
+        ],
+        "/PromptWeaverStack/GetPromptHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetPromptHandlerD46F8D7F"
+          }
+        ],
+        "/PromptWeaverStack/GetPublicPromptsHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetPublicPromptsHandler29749541"
+          }
+        ],
+        "/PromptWeaverStack/SearchPromptsHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SearchPromptsHandlerB4F2BF7F"
+          }
+        ],
+        "/PromptWeaverStack/ForkPromptHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ForkPromptHandler81DA3B40"
+          }
+        ],
+        "/PromptWeaverStack/GetAgentHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetAgentHandler46FB3BB0"
+          }
+        ],
+        "/PromptWeaverStack/UpdateAgentHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateAgentHandler5E36D64B"
+          }
+        ],
+        "/PromptWeaverStack/GetAgentVersionsHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetAgentVersionsHandlerA955A417"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApi6468161D"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiDeploymentCA0378ECcaf1819fbfa0b025978a9414431e9693"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiDeploymentStageprodFFCCA296"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiEndpoint2AB50974"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiOPTIONSB6AEB527"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsDA518BD6"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsOPTIONS16794000"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/POST/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsPOSTApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7POSTprompts0151185A"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/POST/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsPOSTApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7POSTpromptsEF33F318"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsPOST077CEC60"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/public/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptspublicD81417B9"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/public/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptspublicOPTIONSBFCBA840"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/public/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.public": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptspublicGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptspublic63B86DF9"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/public/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.public": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptspublicGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptspublic0C23AF63"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/public/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptspublicGET8672342E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/search/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptssearchD70C09D3"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/search/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptssearchOPTIONSE9564FA8"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/search/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.search": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptssearchGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptssearch4C8C251A"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/search/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.search": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptssearchGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptssearchAD8185AD"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/search/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptssearchGETA4783D63"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsid913E05D9"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidOPTIONSBAC3F65B"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptsid42E5996E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptsidE2761C8E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidGET3A20B514"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidfork22A11ACF"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidforkOPTIONSCFC71973"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/POST/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts.{id}.fork": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidforkPOSTApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7POSTpromptsidfork45FCDEA0"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/POST/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts.{id}.fork": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidforkPOSTApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7POSTpromptsidforkEB0058F5"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApipromptsidforkPOST0941B80E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsCFC09B94"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsOPTIONS6077F33E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsid18104C61"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidOPTIONS6B2E978B"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsidE7B18B7C"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsid8366815E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidGET2E363986"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/PUT/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.PUT..agents.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidPUTApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7PUTagentsidE5AB270E"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/PUT/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.PUT..agents.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidPUTApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7PUTagentsid52080FE3"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidPUTC957A91B"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidversions44C59D5C"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidversionsOPTIONS151D32CB"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}.versions": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidversionsGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsidversionsF9E21762"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}.versions": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidversionsGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsidversions4E2EB6C0"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverApiagentsidversionsGET9D7C384F"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverAuthorizer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverAuthorizer46019229"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverStaticAssets/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverStaticAssets020EBAA6"
+          }
+        ],
+        "/PromptWeaverStack/PromptWeaverStaticAssets/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PromptWeaverStaticAssetsPolicyCFD7FBED"
+          }
+        ],
+        "/PromptWeaverStack/UserPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolId"
+          }
+        ],
+        "/PromptWeaverStack/UserPoolClientId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolClientId"
+          }
+        ],
+        "/PromptWeaverStack/ApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUrl"
+          }
+        ],
+        "/PromptWeaverStack/StaticAssetsUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StaticAssetsUrl"
+          }
+        ],
+        "/PromptWeaverStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/PromptWeaverStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/PromptWeaverStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/PromptWeaverStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "PromptWeaverStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1018.0"
+}

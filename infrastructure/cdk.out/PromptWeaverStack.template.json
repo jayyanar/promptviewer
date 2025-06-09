@@ -1,0 +1,2880 @@
+{
+ "Resources": {
+  "PromptWeaverPrompts54D03F2B": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverPrompts/Resource"
+   }
+  },
+  "PromptWeaverAgentsC417A6F4": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "promptId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "promptId-index",
+      "KeySchema": [
+       {
+        "AttributeName": "promptId",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverAgents/Resource"
+   }
+  },
+  "PromptWeaverVersions96BB21F1": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "agentId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "agentId-index",
+      "KeySchema": [
+       {
+        "AttributeName": "agentId",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverVersions/Resource"
+   }
+  },
+  "PromptWeaverUsers6B4F7664": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverUsers/Resource"
+   }
+  },
+  "PromptWeaverUserPoolC4194F4C": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_email",
+       "Priority": 1
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "LambdaConfig": {
+     "PreSignUp": {
+      "Fn::GetAtt": [
+       "PreSignupHandlerA249D3E0",
+       "Arn"
+      ]
+     }
+    },
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": true,
+      "RequireUppercase": true
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "email",
+      "Required": true
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "linkedin_url"
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverUserPool/Resource"
+   }
+  },
+  "PromptWeaverUserPoolPreSignUpCognitoEA5FE0A7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "PreSignupHandlerA249D3E0",
+      "Arn"
+     ]
+    },
+    "Principal": "cognito-idp.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "PromptWeaverUserPoolC4194F4C",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverUserPool/PreSignUpCognito"
+   }
+  },
+  "PreSignupHandlerServiceRoleA0E30858": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PreSignupHandler/ServiceRole/Resource"
+   }
+  },
+  "PreSignupHandlerA249D3E0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "17b218be4001fafbe5420a9c15ba6ae44b4d5d4fbfeed22b615bb2158b96492c.zip"
+    },
+    "Handler": "cognitoPreSignup.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "PreSignupHandlerServiceRoleA0E30858",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PreSignupHandlerServiceRoleA0E30858"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PreSignupHandler/Resource",
+    "aws:asset:path": "asset.17b218be4001fafbe5420a9c15ba6ae44b4d5d4fbfeed22b615bb2158b96492c",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GoogleProvider566D8493": {
+   "Type": "AWS::Cognito::UserPoolIdentityProvider",
+   "Properties": {
+    "AttributeMapping": {
+     "email": "email",
+     "given_name": "given_name",
+     "family_name": "family_name",
+     "picture": "picture"
+    },
+    "ProviderDetails": {
+     "client_id": "YOUR_GOOGLE_CLIENT_ID",
+     "client_secret": "YOUR_GOOGLE_CLIENT_SECRET",
+     "authorize_scopes": "profile email openid"
+    },
+    "ProviderName": "Google",
+    "ProviderType": "Google",
+    "UserPoolId": {
+     "Ref": "PromptWeaverUserPoolC4194F4C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/GoogleProvider/Resource"
+   }
+  },
+  "PromptWeaverUserPoolClient7327CCCC": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "email",
+     "openid",
+     "profile"
+    ],
+    "CallbackURLs": [
+     "http://localhost:3000/auth/callback",
+     "https://promptweaver.example.com/auth/callback"
+    ],
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "LogoutURLs": [
+     "http://localhost:3000/",
+     "https://promptweaver.example.com/"
+    ],
+    "SupportedIdentityProviders": [
+     "Google",
+     "COGNITO"
+    ],
+    "UserPoolId": {
+     "Ref": "PromptWeaverUserPoolC4194F4C"
+    }
+   },
+   "DependsOn": [
+    "GoogleProvider566D8493"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverUserPoolClient/Resource"
+   }
+  },
+  "PromptWeaverLambdaRole5D29D728": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverLambdaRole/Resource"
+   }
+  },
+  "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PromptWeaverAgentsC417A6F4",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "PromptWeaverPrompts54D03F2B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "PromptWeaverUsers6B4F7664",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "PromptWeaverVersions96BB21F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PromptWeaverAgentsC417A6F4",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PromptWeaverVersions96BB21F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": "bedrock:InvokeModel",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "Roles": [
+     {
+      "Ref": "PromptWeaverLambdaRole5D29D728"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverLambdaRole/DefaultPolicy/Resource"
+   }
+  },
+  "PromptHandler42443BB3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROMPTS_TABLE": {
+       "Ref": "PromptWeaverPrompts54D03F2B"
+      },
+      "AGENTS_TABLE": {
+       "Ref": "PromptWeaverAgentsC417A6F4"
+      },
+      "VERSIONS_TABLE": {
+       "Ref": "PromptWeaverVersions96BB21F1"
+      },
+      "USERS_TABLE": {
+       "Ref": "PromptWeaverUsers6B4F7664"
+      }
+     }
+    },
+    "Handler": "promptHandler.submitPrompt",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetPromptHandlerD46F8D7F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROMPTS_TABLE": {
+       "Ref": "PromptWeaverPrompts54D03F2B"
+      },
+      "AGENTS_TABLE": {
+       "Ref": "PromptWeaverAgentsC417A6F4"
+      }
+     }
+    },
+    "Handler": "promptHandler.getPrompt",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/GetPromptHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetPublicPromptsHandler29749541": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROMPTS_TABLE": {
+       "Ref": "PromptWeaverPrompts54D03F2B"
+      }
+     }
+    },
+    "Handler": "promptHandler.getPublicPrompts",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/GetPublicPromptsHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "SearchPromptsHandlerB4F2BF7F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROMPTS_TABLE": {
+       "Ref": "PromptWeaverPrompts54D03F2B"
+      }
+     }
+    },
+    "Handler": "promptHandler.searchPrompts",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/SearchPromptsHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ForkPromptHandler81DA3B40": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROMPTS_TABLE": {
+       "Ref": "PromptWeaverPrompts54D03F2B"
+      },
+      "AGENTS_TABLE": {
+       "Ref": "PromptWeaverAgentsC417A6F4"
+      }
+     }
+    },
+    "Handler": "promptHandler.forkPrompt",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/ForkPromptHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetAgentHandler46FB3BB0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "AGENTS_TABLE": {
+       "Ref": "PromptWeaverAgentsC417A6F4"
+      }
+     }
+    },
+    "Handler": "agentHandler.getAgent",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/GetAgentHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "UpdateAgentHandler5E36D64B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "AGENTS_TABLE": {
+       "Ref": "PromptWeaverAgentsC417A6F4"
+      },
+      "VERSIONS_TABLE": {
+       "Ref": "PromptWeaverVersions96BB21F1"
+      }
+     }
+    },
+    "Handler": "agentHandler.updateAgent",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/UpdateAgentHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetAgentVersionsHandlerA955A417": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "VERSIONS_TABLE": {
+       "Ref": "PromptWeaverVersions96BB21F1"
+      }
+     }
+    },
+    "Handler": "agentHandler.getAgentVersions",
+    "Role": {
+     "Fn::GetAtt": [
+      "PromptWeaverLambdaRole5D29D728",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PromptWeaverLambdaRoleDefaultPolicyBD7D0E96",
+    "PromptWeaverLambdaRole5D29D728"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/GetAgentVersionsHandler/Resource",
+    "aws:asset:path": "asset.feaa7905447e921cf93da943403a0a95e0f9d7fcc2730c96337f5863d0660842",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "PromptWeaverApi6468161D": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "API for PromptWeaver application",
+    "Name": "PromptWeaver API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Resource"
+   }
+  },
+  "PromptWeaverApiDeploymentCA0378ECcaf1819fbfa0b025978a9414431e9693": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "API for PromptWeaver application",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "DependsOn": [
+    "PromptWeaverApiagentsidGET2E363986",
+    "PromptWeaverApiagentsidOPTIONS6B2E978B",
+    "PromptWeaverApiagentsidPUTC957A91B",
+    "PromptWeaverApiagentsid18104C61",
+    "PromptWeaverApiagentsidversionsGET9D7C384F",
+    "PromptWeaverApiagentsidversionsOPTIONS151D32CB",
+    "PromptWeaverApiagentsidversions44C59D5C",
+    "PromptWeaverApiagentsOPTIONS6077F33E",
+    "PromptWeaverApiagentsCFC09B94",
+    "PromptWeaverApiOPTIONSB6AEB527",
+    "PromptWeaverApipromptsidforkOPTIONSCFC71973",
+    "PromptWeaverApipromptsidforkPOST0941B80E",
+    "PromptWeaverApipromptsidfork22A11ACF",
+    "PromptWeaverApipromptsidGET3A20B514",
+    "PromptWeaverApipromptsidOPTIONSBAC3F65B",
+    "PromptWeaverApipromptsid913E05D9",
+    "PromptWeaverApipromptsOPTIONS16794000",
+    "PromptWeaverApipromptsPOST077CEC60",
+    "PromptWeaverApipromptspublicGET8672342E",
+    "PromptWeaverApipromptspublicOPTIONSBFCBA840",
+    "PromptWeaverApipromptspublicD81417B9",
+    "PromptWeaverApipromptsDA518BD6",
+    "PromptWeaverApipromptssearchGETA4783D63",
+    "PromptWeaverApipromptssearchOPTIONSE9564FA8",
+    "PromptWeaverApipromptssearchD70C09D3",
+    "PromptWeaverAuthorizer46019229"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Deployment/Resource"
+   }
+  },
+  "PromptWeaverApiDeploymentStageprodFFCCA296": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "PromptWeaverApiDeploymentCA0378ECcaf1819fbfa0b025978a9414431e9693"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "PromptWeaverApiOPTIONSB6AEB527": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "PromptWeaverApi6468161D",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApipromptsDA518BD6": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "PromptWeaverApi6468161D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "prompts",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/Resource"
+   }
+  },
+  "PromptWeaverApipromptsOPTIONS16794000": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptsDA518BD6"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApipromptsPOSTApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7POSTprompts0151185A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "PromptHandler42443BB3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/POST/prompts"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/POST/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts"
+   }
+  },
+  "PromptWeaverApipromptsPOSTApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7POSTpromptsEF33F318": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "PromptHandler42443BB3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/POST/prompts"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/POST/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts"
+   }
+  },
+  "PromptWeaverApipromptsPOST077CEC60": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "PromptWeaverAuthorizer46019229"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "PromptHandler42443BB3",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptsDA518BD6"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/POST/Resource"
+   }
+  },
+  "PromptWeaverApipromptspublicD81417B9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PromptWeaverApipromptsDA518BD6"
+    },
+    "PathPart": "public",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/public/Resource"
+   }
+  },
+  "PromptWeaverApipromptspublicOPTIONSBFCBA840": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptspublicD81417B9"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/public/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApipromptspublicGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptspublic63B86DF9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetPublicPromptsHandler29749541",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/GET/prompts/public"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/public/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.public"
+   }
+  },
+  "PromptWeaverApipromptspublicGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptspublic0C23AF63": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetPublicPromptsHandler29749541",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/GET/prompts/public"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/public/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.public"
+   }
+  },
+  "PromptWeaverApipromptspublicGET8672342E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetPublicPromptsHandler29749541",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptspublicD81417B9"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/public/GET/Resource"
+   }
+  },
+  "PromptWeaverApipromptssearchD70C09D3": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PromptWeaverApipromptsDA518BD6"
+    },
+    "PathPart": "search",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/search/Resource"
+   }
+  },
+  "PromptWeaverApipromptssearchOPTIONSE9564FA8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptssearchD70C09D3"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/search/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApipromptssearchGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptssearch4C8C251A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "SearchPromptsHandlerB4F2BF7F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/GET/prompts/search"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/search/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.search"
+   }
+  },
+  "PromptWeaverApipromptssearchGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptssearchAD8185AD": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "SearchPromptsHandlerB4F2BF7F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/GET/prompts/search"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/search/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.search"
+   }
+  },
+  "PromptWeaverApipromptssearchGETA4783D63": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "SearchPromptsHandlerB4F2BF7F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptssearchD70C09D3"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/search/GET/Resource"
+   }
+  },
+  "PromptWeaverApipromptsid913E05D9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PromptWeaverApipromptsDA518BD6"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/Resource"
+   }
+  },
+  "PromptWeaverApipromptsidOPTIONSBAC3F65B": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptsid913E05D9"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApipromptsidGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptsid42E5996E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetPromptHandlerD46F8D7F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/GET/prompts/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.{id}"
+   }
+  },
+  "PromptWeaverApipromptsidGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETpromptsidE2761C8E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetPromptHandlerD46F8D7F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/GET/prompts/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..prompts.{id}"
+   }
+  },
+  "PromptWeaverApipromptsidGET3A20B514": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "PromptWeaverAuthorizer46019229"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetPromptHandlerD46F8D7F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptsid913E05D9"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/GET/Resource"
+   }
+  },
+  "PromptWeaverApipromptsidfork22A11ACF": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PromptWeaverApipromptsid913E05D9"
+    },
+    "PathPart": "fork",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/Resource"
+   }
+  },
+  "PromptWeaverApipromptsidforkOPTIONSCFC71973": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptsidfork22A11ACF"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApipromptsidforkPOSTApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7POSTpromptsidfork45FCDEA0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ForkPromptHandler81DA3B40",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/POST/prompts/*/fork"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/POST/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts.{id}.fork"
+   }
+  },
+  "PromptWeaverApipromptsidforkPOSTApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7POSTpromptsidforkEB0058F5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ForkPromptHandler81DA3B40",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/POST/prompts/*/fork"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/POST/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.POST..prompts.{id}.fork"
+   }
+  },
+  "PromptWeaverApipromptsidforkPOST0941B80E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "PromptWeaverAuthorizer46019229"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ForkPromptHandler81DA3B40",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApipromptsidfork22A11ACF"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/prompts/{id}/fork/POST/Resource"
+   }
+  },
+  "PromptWeaverApiagentsCFC09B94": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "PromptWeaverApi6468161D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "agents",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/Resource"
+   }
+  },
+  "PromptWeaverApiagentsOPTIONS6077F33E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApiagentsCFC09B94"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApiagentsid18104C61": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PromptWeaverApiagentsCFC09B94"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/Resource"
+   }
+  },
+  "PromptWeaverApiagentsidOPTIONS6B2E978B": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApiagentsid18104C61"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApiagentsidGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsidE7B18B7C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetAgentHandler46FB3BB0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/GET/agents/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}"
+   }
+  },
+  "PromptWeaverApiagentsidGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsid8366815E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetAgentHandler46FB3BB0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/GET/agents/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}"
+   }
+  },
+  "PromptWeaverApiagentsidGET2E363986": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "PromptWeaverAuthorizer46019229"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetAgentHandler46FB3BB0",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApiagentsid18104C61"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/GET/Resource"
+   }
+  },
+  "PromptWeaverApiagentsidPUTApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7PUTagentsidE5AB270E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UpdateAgentHandler5E36D64B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/PUT/agents/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/PUT/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.PUT..agents.{id}"
+   }
+  },
+  "PromptWeaverApiagentsidPUTApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7PUTagentsid52080FE3": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UpdateAgentHandler5E36D64B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/PUT/agents/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/PUT/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.PUT..agents.{id}"
+   }
+  },
+  "PromptWeaverApiagentsidPUTC957A91B": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "PromptWeaverAuthorizer46019229"
+    },
+    "HttpMethod": "PUT",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "UpdateAgentHandler5E36D64B",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApiagentsid18104C61"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/PUT/Resource"
+   }
+  },
+  "PromptWeaverApiagentsidversions44C59D5C": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PromptWeaverApiagentsid18104C61"
+    },
+    "PathPart": "versions",
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/Resource"
+   }
+  },
+  "PromptWeaverApiagentsidversionsOPTIONS151D32CB": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PromptWeaverApiagentsidversions44C59D5C"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/OPTIONS/Resource"
+   }
+  },
+  "PromptWeaverApiagentsidversionsGETApiPermissionPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsidversionsF9E21762": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetAgentVersionsHandlerA955A417",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/",
+       {
+        "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+       },
+       "/GET/agents/*/versions"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/GET/ApiPermission.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}.versions"
+   }
+  },
+  "PromptWeaverApiagentsidversionsGETApiPermissionTestPromptWeaverStackPromptWeaverApi5C71BEA7GETagentsidversions4E2EB6C0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetAgentVersionsHandlerA955A417",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PromptWeaverApi6468161D"
+       },
+       "/test-invoke-stage/GET/agents/*/versions"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/GET/ApiPermission.Test.PromptWeaverStackPromptWeaverApi5C71BEA7.GET..agents.{id}.versions"
+   }
+  },
+  "PromptWeaverApiagentsidversionsGET9D7C384F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "PromptWeaverAuthorizer46019229"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetAgentVersionsHandlerA955A417",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PromptWeaverApiagentsidversions44C59D5C"
+    },
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverApi/Default/agents/{id}/versions/GET/Resource"
+   }
+  },
+  "PromptWeaverAuthorizer46019229": {
+   "Type": "AWS::ApiGateway::Authorizer",
+   "Properties": {
+    "IdentitySource": "method.request.header.Authorization",
+    "Name": "PromptWeaverStackPromptWeaverAuthorizer8B91662F",
+    "ProviderARNs": [
+     {
+      "Fn::GetAtt": [
+       "PromptWeaverUserPoolC4194F4C",
+       "Arn"
+      ]
+     }
+    ],
+    "RestApiId": {
+     "Ref": "PromptWeaverApi6468161D"
+    },
+    "Type": "COGNITO_USER_POOLS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverAuthorizer/Resource"
+   }
+  },
+  "PromptWeaverStaticAssets020EBAA6": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": false,
+     "BlockPublicPolicy": false,
+     "IgnorePublicAcls": false,
+     "RestrictPublicBuckets": false
+    },
+    "WebsiteConfiguration": {
+     "IndexDocument": "index.html"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverStaticAssets/Resource"
+   }
+  },
+  "PromptWeaverStaticAssetsPolicyCFD7FBED": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "PromptWeaverStaticAssets020EBAA6"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "PromptWeaverStaticAssets020EBAA6",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/PromptWeaverStaticAssets/Policy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WRy27CMBBFv4W9cXl00S2katVF1Si0a+TEQzAknsgzAaWR/71ynACbru65nqftlVwtFnI5U1eaF/o8r0wu+x2r4izUlfa97qyqUeey/1Z5BSI52AG8KLC0hlH2PwQuRaxC7MYTfGiwbLhLHV6MBveOWMY2/2XcSpPKgOXH1HjiRaXqXCvZJwebgqsNkUEr3lpbcIDkYCf2wqha9hnGmYOmWJmiCzaSF7TeKyJgkpsggtay37bFGXirCETEUDBSlHufR++FakypGK6qk30GxJvGDLNHfIWmwq4er/bgdqzKYcsIGRC2roBhhU/gI+oQHGmKjp1Hjl8yPRdtWj6iM7/gQtrdeX+vH24cJhpbhqyvlpuWvbCoQZ7o6bJ8kauFfJ6dyJi5ay2bGmQW9Q8GkFo6PgIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "PromptWeaverStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "PromptWeaverApiEndpoint2AB50974": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "PromptWeaverApi6468161D"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "UserPoolId": {
+   "Description": "The ID of the Cognito User Pool",
+   "Value": {
+    "Ref": "PromptWeaverUserPoolC4194F4C"
+   }
+  },
+  "UserPoolClientId": {
+   "Description": "The ID of the Cognito User Pool Client",
+   "Value": {
+    "Ref": "PromptWeaverUserPoolClient7327CCCC"
+   }
+  },
+  "ApiUrl": {
+   "Description": "The URL of the API Gateway",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "PromptWeaverApi6468161D"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "PromptWeaverApiDeploymentStageprodFFCCA296"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "StaticAssetsUrl": {
+   "Description": "The URL of the static assets bucket",
+   "Value": {
+    "Fn::GetAtt": [
+     "PromptWeaverStaticAssets020EBAA6",
+     "WebsiteURL"
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
