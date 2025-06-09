@@ -7,7 +7,7 @@ export default function AuthCallback() {
 
   useEffect(() => {
     // Set up a listener for auth events
-    const listener = (data) => {
+    const listener = (data: any) => {
       switch (data.payload.event) {
         case 'signIn':
           console.log('User signed in');
