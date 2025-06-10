@@ -4,7 +4,7 @@ import AgentTile from '../../../components/AgentTile';
 import OrchestrationViewer from '../../../components/OrchestrationViewer';
 
 // Mock data for demo mode
-const MOCK_AGENTS = {
+const MOCK_AGENTS: Record<string, any[]> = {
   'demo-1': [
     {
       id: 'agent-1-1',
@@ -262,7 +262,7 @@ const MOCK_AGENTS = {
   ]
 };
 
-const MOCK_PROMPTS = {
+const MOCK_PROMPTS: Record<string, any> = {
   'demo-1': {
     id: 'demo-1',
     title: 'Customer Support Chatbot System',
@@ -342,10 +342,12 @@ function AgentsPage() {
       setTimeout(() => {
         try {
           const mockPromptId = promptId as string;
-          const mockPrompt = MOCK_PROMPTS[mockPromptId];
-          const mockAgents = MOCK_AGENTS[mockPromptId] || [];
           
-          if (mockPrompt) {
+          // Check if the mockPromptId exists in MOCK_PROMPTS
+          if (MOCK_PROMPTS.hasOwnProperty(mockPromptId)) {
+            const mockPrompt = MOCK_PROMPTS[mockPromptId];
+            const mockAgents = MOCK_AGENTS[mockPromptId] || [];
+            
             setPrompt(mockPrompt);
             setAgents(mockAgents);
           } else {
