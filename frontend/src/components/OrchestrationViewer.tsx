@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import mermaid from 'mermaid';
+// We'll use a client-side only import for mermaid
+// This avoids the build error in Amplify
 
 interface OrchestrationViewerProps {
   orchestration: {
@@ -14,26 +15,37 @@ export default function OrchestrationViewer({ orchestration, agents }: Orchestra
   const mermaidRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Initialize mermaid
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'default',
-      securityLevel: 'loose',
-      fontFamily: 'sans-serif'
-    });
-    
-    // Render the diagram when in diagram mode and when the component mounts
-    if (viewMode === 'diagram' && mermaidRef.current) {
-      try {
-        mermaidRef.current.innerHTML = orchestration.flow;
-        mermaid.init(undefined, mermaidRef.current);
-      } catch (error) {
-        console.error('Error rendering mermaid diagram:', error);
-        // If there's an error, show a fallback
-        if (mermaidRef.current) {
-          mermaidRef.current.innerHTML = '<div class="text-red-500">Error rendering diagram. Please check the syntax.</div>';
+    // Only import and initialize mermaid on the client side
+    if (typeof window !== 'undefined' && viewMode === 'diagram' && mermaidRef.current) {
+      // Dynamic import of mermaid
+      import('mermaid').then((mermaid) => {
+        // Initialize mermaid
+        mermaid.default.initialize({
+          startOnLoad: true,
+          theme: 'default',
+          securityLevel: 'loose',
+          fontFamily: 'sans-serif'
+        });
+        
+        try {
+          // Clear previous content
+          if (mermaidRef.current) {
+            mermaidRef.current.innerHTML = orchestration.flow;
+            mermaid.default.init(undefined, mermaidRef.current);
+          }
+        } catch (error) {
+          console.error('Error rendering mermaid diagram:', error);
+          // If there's an error, show a fallback
+          if (mermaidRef.current) {
+            mermaidRef.current.innerHTML = '<div class="text-red-500">Error rendering diagram. Please check the syntax.</div>';
+          }
         }
-      }
+      }).catch(error => {
+        console.error('Failed to load mermaid:', error);
+        if (mermaidRef.current) {
+          mermaidRef.current.innerHTML = '<div class="text-red-500">Failed to load diagram library. Please try again later.</div>';
+        }
+      });
     }
   }, [viewMode, orchestration.flow]);
 
@@ -72,6 +84,7 @@ export default function OrchestrationViewer({ orchestration, agents }: Orchestra
             <div className="mermaid-diagram-container overflow-auto p-4">
               <div ref={mermaidRef} className="mermaid">
                 {/* Mermaid diagram will be rendered here */}
+                {orchestration.flow}
               </div>
             </div>
           </div>
