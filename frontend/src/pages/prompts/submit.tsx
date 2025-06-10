@@ -28,22 +28,48 @@ function SubmitPrompt() {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
-      // Mock API call - in demo mode, we'll just simulate a successful submission
-      console.log('Submitting prompt:', {
-        content: data.content,
-        title: data.title,
-        tags: tagsArray,
-        isPublic: data.isPublic,
-      });
+      // Check if we're in demo mode
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
       
-      // Wait 2 seconds to simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simulate a successful response with a mock ID
-      const mockId = 'demo-' + Math.floor(Math.random() * 1000);
-      
-      // Redirect to the agents page
-      router.push(`/prompts/${mockId}/agents`);
+      if (isDemoMode) {
+        // Demo mode - use predefined mock data
+        console.log('Demo mode: Using mock data');
+        
+        // Wait 2 seconds to simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Use a predefined ID that matches our mock data
+        const mockIds = ['demo-1', 'demo-2', 'demo-3', 'demo-4'];
+        const mockId = mockIds[Math.floor(Math.random() * mockIds.length)];
+        
+        // Redirect to the agents page
+        router.push(`/prompts/${mockId}/agents`);
+      } else {
+        // Real API call
+        console.log('Production mode: Calling API');
+        
+        const response = await fetch('/api/prompts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('userToken')}` // Assuming token is stored in localStorage
+          },
+          body: JSON.stringify({
+            content: data.content,
+            title: data.title,
+            tags: tagsArray,
+            isPublic: data.isPublic,
+          }),
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to submit prompt');
+        }
+        
+        const result = await response.json();
+        router.push(`/prompts/${result.prompt.id}/agents`);
+      }
     } catch (err: any) {
       console.error('Error submitting prompt:', err);
       setError(err.message || 'Failed to submit prompt. Please try again.');
