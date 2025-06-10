@@ -5,6 +5,10 @@ npm run build
 cat > out/deploy-manifest.json << 'EOF'
 {
   "version": 1,
+  "framework": {
+    "name": "next.js",
+    "version": "13.4.19"
+  },
   "routes": [
     {
       "path": "/_next/static/*",
