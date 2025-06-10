@@ -1,6 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
-// We'll use a client-side only import for mermaid
-// This avoids the build error in Amplify
+import { useState } from 'react';
 
 interface OrchestrationViewerProps {
   orchestration: {
@@ -11,44 +9,8 @@ interface OrchestrationViewerProps {
 }
 
 export default function OrchestrationViewer({ orchestration, agents }: OrchestrationViewerProps) {
-  const [viewMode, setViewMode] = useState<'diagram' | 'description'>('diagram');
-  const mermaidRef = useRef<HTMLDivElement>(null);
+  const [viewMode, setViewMode] = useState<'diagram' | 'description'>('description');
   
-  useEffect(() => {
-    // Only import and initialize mermaid on the client side
-    if (typeof window !== 'undefined' && viewMode === 'diagram' && mermaidRef.current) {
-      // Dynamic import of mermaid
-      import('mermaid').then((mermaid) => {
-        // Initialize mermaid
-        mermaid.default.initialize({
-          startOnLoad: true,
-          theme: 'default',
-          securityLevel: 'loose',
-          fontFamily: 'sans-serif'
-        });
-        
-        try {
-          // Clear previous content
-          if (mermaidRef.current) {
-            mermaidRef.current.innerHTML = orchestration.flow;
-            mermaid.default.init(undefined, mermaidRef.current);
-          }
-        } catch (error) {
-          console.error('Error rendering mermaid diagram:', error);
-          // If there's an error, show a fallback
-          if (mermaidRef.current) {
-            mermaidRef.current.innerHTML = '<div class="text-red-500">Error rendering diagram. Please check the syntax.</div>';
-          }
-        }
-      }).catch(error => {
-        console.error('Failed to load mermaid:', error);
-        if (mermaidRef.current) {
-          mermaidRef.current.innerHTML = '<div class="text-red-500">Failed to load diagram library. Please try again later.</div>';
-        }
-      });
-    }
-  }, [viewMode, orchestration.flow]);
-
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
@@ -64,7 +26,7 @@ export default function OrchestrationViewer({ orchestration, agents }: Orchestra
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Diagram View
+            Flow View
           </button>
           <button
             onClick={() => setViewMode('description')}
@@ -81,12 +43,9 @@ export default function OrchestrationViewer({ orchestration, agents }: Orchestra
       <div className="border-t border-gray-200">
         {viewMode === 'diagram' ? (
           <div className="px-4 py-5 sm:p-0">
-            <div className="mermaid-diagram-container overflow-auto p-4">
-              <div ref={mermaidRef} className="mermaid">
-                {/* Mermaid diagram will be rendered here */}
-                {orchestration.flow}
-              </div>
-            </div>
+            <pre className="bg-gray-800 text-white p-4 rounded overflow-auto">
+              {orchestration.flow}
+            </pre>
           </div>
         ) : (
           <div className="px-4 py-5">
