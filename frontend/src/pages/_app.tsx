@@ -12,7 +12,7 @@ Amplify.configure({
     region: process.env.NEXT_PUBLIC_AWS_REGION || 'us-east-1',
     userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
     userPoolWebClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
-    mandatorySignIn: true,
+    mandatorySignIn: false,
     oauth: {
       domain: process.env.NEXT_PUBLIC_AUTH_DOMAIN || `${process.env.NEXT_PUBLIC_USER_POOL_ID?.split('_')[0]}.auth.${process.env.NEXT_PUBLIC_AWS_REGION || 'us-east-1'}.amazoncognito.com`,
       scope: ['email', 'profile', 'openid'],
@@ -20,6 +20,7 @@ Amplify.configure({
       redirectSignOut: typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000',
       responseType: 'code',
     },
+  ssr: false,
   },
   API: {
     endpoints: [
