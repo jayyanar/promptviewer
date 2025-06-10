@@ -27,15 +27,6 @@ export function CustomAuthComponents() {
             >
               Sign in with Google
             </Button>
-            <Button
-              fontWeight="normal"
-              onClick={() => Auth.federatedSignIn({ provider: 'LinkedIn' })}
-              variation="primary"
-              backgroundColor="#0077B5"
-              width="100%"
-            >
-              Sign in with LinkedIn
-            </Button>
           </View>
         );
       },
@@ -53,8 +44,6 @@ export function CustomAuthComponents() {
           <>
             {/* Re-use default FormFields */}
             <Authenticator.SignUp.FormFields />
-            
-            {/* LinkedIn URL field removed as requested */}
           </>
         );
       },
@@ -70,15 +59,6 @@ export function CustomAuthComponents() {
               marginBottom={tokens.space.small}
             >
               Sign up with Google
-            </Button>
-            <Button
-              fontWeight="normal"
-              onClick={() => Auth.federatedSignIn({ provider: 'LinkedIn' })}
-              variation="primary"
-              backgroundColor="#0077B5"
-              width="100%"
-            >
-              Sign up with LinkedIn
             </Button>
           </View>
         );
