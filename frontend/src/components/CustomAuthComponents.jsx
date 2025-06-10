@@ -53,14 +53,8 @@ export function CustomAuthComponents() {
           <>
             {/* Re-use default FormFields */}
             <Authenticator.SignUp.FormFields />
-
-            {/* Add custom LinkedIn URL field */}
-            <TextField
-              name="custom:linkedin_url"
-              label="LinkedIn URL"
-              placeholder="https://www.linkedin.com/in/username"
-              required={true}
-            />
+            
+            {/* LinkedIn URL field removed as requested */}
           </>
         );
       },
