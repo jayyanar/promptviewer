@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { Auth } from 'aws-amplify';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -9,11 +10,11 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-  isAuthenticated: true, // Always authenticated
-  user: { username: 'demo-user', email: 'demo@example.com' }, // Mock user
+  isAuthenticated: false,
+  user: null,
   linkedinUrl: null,
   signOut: async () => {},
-  loading: false,
+  loading: true,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -23,24 +24,43 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // Mock authentication state - always authenticated
-  const [isAuthenticated] = useState(true);
-  const [user] = useState({ 
-    username: 'demo-user', 
-    email: 'demo@example.com',
-    attributes: {
-      email: 'demo@example.com',
-      name: 'Demo User',
-      sub: '12345-mock-user-id'
-    }
-  });
-  const [linkedinUrl] = useState<string | null>(null);
-  const [loading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [linkedinUrl, setLinkedinUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Mock sign out function
+  useEffect(() => {
+    // Check authentication status on mount
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser();
+      setIsAuthenticated(true);
+      setUser(currentUser);
+      
+      // Get LinkedIn URL from user attributes
+      const { attributes } = currentUser;
+      setLinkedinUrl(attributes['custom:linkedin_url'] || null);
+    } catch (error) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setLinkedinUrl(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const signOut = async () => {
-    console.log('Sign out clicked - authentication disabled for demo purposes');
-    // In a real app, this would sign the user out
+    try {
+      await Auth.signOut();
+      setIsAuthenticated(false);
+      setUser(null);
+      setLinkedinUrl(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (

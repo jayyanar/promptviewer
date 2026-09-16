@@ -1,14 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
+  swcMinify: true,
   images: {
+    domains: ['localhost', 'promptweaver-example.s3.amazonaws.com'],
     unoptimized: true,
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
-    NEXT_PUBLIC_DEMO_MODE: process.env.NEXT_PUBLIC_DEMO_MODE || 'true',
+    // Environment variables can be added here
   },
+  // Add these settings for Amplify deployment
+  output: 'export',
+  trailingSlash: true,
+  distDir: 'out',
 }
 
 module.exports = nextConfig
